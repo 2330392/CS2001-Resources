@@ -1,55 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>
-            Fresh Food For All
-        </title>
-        <link rel="icon" type="image/png"  href="favicon.png">
-        <link rel="stylesheet" href="CS2001-Week2-Registration.css"> 
-        <script src="CS2001-Week2-RegistrationValidation.js"></script>
+        <title>Fresh Food For All</title>
+        <link rel="stylesheet" href="CS2001-Week2-Registration.css">
+        <script>
+            // Validation function
+            function validateForm(event) {
+                event.preventDefault(); // Prevent the form from submitting
+
+                // Get form values
+                const name = document.getElementById("name").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value;
+                const retypePassword = document.getElementById("retype-password").value;
+                const isBuyer = document.getElementById("buyer").checked;
+                const isSeller = document.getElementById("seller").checked;
+                const agreedTerms = document.getElementById("terms").checked;
+
+                // Regular expression for email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                // Validation checks
+                if (!name || !email || !password || !retypePassword) {
+                    alert("Please fill out all required fields.");
+                    return;
+                }
+
+                if (!emailRegex.test(email)) {
+                    alert("Please enter a valid email address.");
+                    return;
+                }
+
+                if (password.length < 8) {
+                    alert("Password must be at least 8 characters long.");
+                    return;
+                }
+
+                if (password !== retypePassword) {
+                    alert("Passwords do not match.");
+                    return;
+                }
+
+                if (!isBuyer && !isSeller) {
+                    alert("Please select at least one option: Buyer or Seller.");
+                    return;
+                }
+
+                if (!agreedTerms) {
+                    alert("You must agree to the Terms of Use and Privacy Policy.");
+                    return;
+                }
+
+                // If validation passes, display registration info
+                const registrationInfo = `
+                    Registration successful!
+                    Name: ${name}
+                    Email: ${email}
+                    Role: ${isBuyer ? "Buyer" : ""}${isBuyer && isSeller ? " & " : ""}${isSeller ? "Seller" : ""}
+                `;
+
+                const hiddenSection = document.getElementById("hiddenSection");
+                hiddenSection.innerHTML = `<p>${registrationInfo}</p>`;
+                hiddenSection.style.display = "block";
+            }
+        </script>
     </head>
     <body>
         <header></header>
         <nav>
-            <ul class=navlist>
-                <li><a  href="/Home" >Home</a></li>
-                <li><a  href="/Register">Register</a></li>
-                <li><a  href="/Login">Login</a></li>
-                <li><a  href="/Help">Help</a></li>
+            <ul class="navlist">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Register</a></li>
+                <li><a href="#">Login</a></li>
+                <li><a href="#">Help</a></li>
             </ul>
          </nav>
         <main>
-            <aside>
-                 <input type="text" class="search" id="search" name="search" placeholder="Search"><br>
-            </aside>
+            <aside></aside>
             <section>
-                <form class="center" novalidate>
-                    <label class="textInput" for="name">Name:</label>
-                    <input type="text" id="name" name="name" required maxlength="50"><br><br>
+                <form class="center" onsubmit="validateForm(event)" novalidate>
+                    <!-- User Details -->
+                    <label for="name">Name:</label><br>
+                    <input type="text" id="name" name="name" required><br><br>
 
-                    <label class="textInput" for="email">Email:</label>
+                    <label for="email">Email:</label><br>
                     <input type="email" id="email" name="email" required><br><br>
 
-                    <label class="textInput" for="password">Password:</label>
-                    <input type="password" id="password" name="password" required minlength="8"><br><br>
+                    <label for="password">Password:</label><br>
+                    <input type="password" id="password" name="password" required><br><br>
 
-                    <label class="textInput" for="repPassword">Re-type password:</label>
-                    <input type="password" id="repPassword" name="repPassword" required minlength="8"><br><br>
+                    <label for="retype-password">Retype Password:</label><br>
+                    <input type="password" id="retype-password" name="retype-password" required><br><br>
 
-                    <!-- Example given for user type checkboxes-->
-                    <input type="checkbox" id="buyer" name="buyer" value="buyer">
+                    <!-- Buyer/Seller Options -->
+                    <input type="checkbox" id="buyer" name="user-type" value="buyer">
                     <label for="buyer">I want to buy produce directly from allotment owners.</label><br>
-                    <input type="checkbox" id="seller" name="seller" value="seller">
+                    <input type="checkbox" id="seller" name="user-type" value="seller">
                     <label for="seller">I want to sell produce from my allotment.</label><br><br>
 
-                    <input type="checkbox" id="tos" name="tos" value="tos" required>
-                    <label for="tos">I agree to the <a href="">Terms of Use</a> and <a href="">Privacy Policy</a>.</label>
-                    <br><br>
-                    <input type="button" id="button" value="Register" onclick="submitForm()">
-                    <a href="">Learn more</a>
+                    <!-- Terms Agreement -->
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the <a href="#">terms of use</a> and <a href="#">privacy policy</a>.</label><br><br>
+
+                    <!-- Submit Button -->
+                    <button type="submit">Register</button>
+                    <a href="#">Learn more</a>
                 </form>
-                <div class="center" id="hiddenSection">
-                    <p id="hiddenParagraph"></p>
+                <div class="center" id="hiddenSection" style="display: none;">
+                    <!-- Registration info will be added here -->
                 </div>
             </section>
         </main>
